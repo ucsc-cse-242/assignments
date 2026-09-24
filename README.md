@@ -2,7 +2,7 @@
 
 Use the supplied `Assignment1/Assignment1.py` starter. Fill the `# YOUR CODE HERE` function bodies and `# YOUR ANSWER HERE` comment blocks. Save the required plots from your Python program and follow the handout's submission instructions.
 
-- Assignment 1: [handout](Assignment1/README.md), [Python interface](Assignment1/INTERFACE.md).
+- Assignment 1: [assignment](Assignment1/README.md)
 
 # Install the requirements
 You will install the requirements listed in the repository's

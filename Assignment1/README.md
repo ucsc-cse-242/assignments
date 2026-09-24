@@ -33,7 +33,7 @@ $$
 Compute:
 
 $$
-AB,\quad BA,\quad (A+B)^T,\quad AB^T,\quad \operatorname{trace}(A),\quad \operatorname{trace}(AB).
+AB,\quad BA,\quad (A+B)^T,\quad AB^T,\quad \mathrm{trace}(A),\quad \mathrm{trace}(AB).
 $$
 
 **Q2 (10 points).** For the following matrix:
@@ -47,7 +47,7 @@ Calculate the eigenvalues and eigenvectors. Verify your solution by showing $Mv 
 **Q3 (Ungraded practice, 0 points).** Prove the following property of the trace operator:
 
 $$
-\operatorname{trace}(AB)=\operatorname{trace}(BA)
+\mathrm{trace}(AB)=\mathrm{trace}(BA)
 $$
 
 **Q4 (5 points).** Show step-by-step that the inverse of the matrix
