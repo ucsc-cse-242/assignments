@@ -36,7 +36,7 @@ $$
 AB,\quad BA,\quad (A+B)^T,\quad AB^T,\quad \mathrm{trace}(A),\quad \mathrm{trace}(AB).
 $$
 
-**Q2 (4 points).** For the following matrix:
+**Q2 (5 points).** For the following matrix:
 
 $$
 M = \begin{bmatrix}2 & -1 \\ -1 & 2\end{bmatrix}
@@ -88,9 +88,9 @@ $$
 P(\theta)=\begin{cases}2\theta, & 0\leq\theta\leq 1 \\ 0, & \text{otherwise}\end{cases}
 $$
 
-**Q4 (7.5 points).** Consider a Gaussian distribution with parameters $\mu$ (mean) and $\sigma^2$ (variance). Given the dataset $X=\{1,3,5,7\}$, derive the Maximum Likelihood Estimates (MLE) for both $\mu$ and $\sigma^2$. Show each mathematical step clearly.
+**Q4 (5 points).** Consider a Gaussian distribution with parameters $\mu$ (mean) and $\sigma^2$ (variance). Given the dataset $X=\{1,3,5,7\}$, derive the Maximum Likelihood Estimates (MLE) for both $\mu$ and $\sigma^2$. Show each mathematical step clearly.
 
-**Q5 (7.5 points).** You observe samples drawn from a Gaussian distribution with unknown mean $\mu$ and known variance $\sigma^2=4$. Given a Gaussian prior for the mean $\mu$:
+**Q5 (5 points).** You observe samples drawn from a Gaussian distribution with unknown mean $\mu$ and known variance $\sigma^2=4$. Given a Gaussian prior for the mean $\mu$:
 
 $$
 \mu\sim\mathcal{N}(0,1)
@@ -98,7 +98,7 @@ $$
 
 derive the MAP estimate of $\mu$ after observing a single data point $x=5$.
 
-**Q6 (Ungraded practice, 0 points).** Prove the variance expansion identity:
+**Q6 (Variance Expansion Proof, 5 points).** Prove the variance expansion identity:
 
 $$
 Var(X)=E(X^2)-[E(X)]^2
@@ -106,7 +106,7 @@ $$
 
 ## Part 3: Principal Component Analysis (Math and Programming) (30 points)
 
-**Q1 (Ungraded practice, 0 points).** Given a dataset represented by a random vector $X$, derive the mathematical expression for the variance of the projection onto a unit vector $u$:
+**Q1 (10 points).** Given a dataset represented by a random vector $X$, derive the mathematical expression for the variance of the projection onto a unit vector $u$:
 
 $$
 Var(u^TX)=u^T\Sigma u
@@ -116,7 +116,7 @@ Document each intermediate mathematical step and define the covariance matrix $\
 
 **Q2 (5 points).** Generate a synthetic 2-dimensional dataset composed of two correlated Gaussian features. Use NumPy for data generation. Visualize this dataset with scatter plots and discuss the correlation structure observed.
 
-**Q3 (20 points).** Implement PCA from scratch using NumPy. Follow these steps:
+**Q3 (10 points).** Implement PCA from scratch using NumPy. Follow these steps:
 
 - Center your dataset (mean subtraction).
 - Compute the covariance matrix.
@@ -125,15 +125,14 @@ Document each intermediate mathematical step and define the covariance matrix $\
 
 Document each step in your implementation, linking it to your mathematical derivation from Q1. Provide visualizations of your original data along with identified principal component directions.
 
-**Q4 (5 points).** Compute the proportion of total variance explained by each principal component. Discuss the results and explain the significance of dimensionality reduction. Provide insights into the trade-off between explained variance and dimensionality reduction.
+**Q4 (10 points).** Compute the proportion of total variance explained by each principal component. Discuss the results and explain the significance of dimensionality reduction. Provide insights into the trade-off between explained variance and dimensionality reduction.
 
 ## Submission
 
-Submit to the autograder using:
-`python3 -m autograder.run.submit <filename>`
-
-There are instructions on installing and using the autograder on the [course README](../README.md).
-
+Submit to Canvas by the deadline:
+- Derivations as PDF (handwritten or typed).
+- Python code in documented Jupyter Notebooks or python code.
+- Visualizations and analyses with notebooks (or printed in pdf).
 
 ## Collaboration and AI Policy
 
