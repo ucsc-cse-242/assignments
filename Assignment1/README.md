@@ -19,7 +19,7 @@ In this assignment, you will:
 
 ## Grading
 
-The assignment is worth **100 points**, divided as: 20 for linear algebra, 50 for probability and estimation, and 30 for PCA. Please submit the final assignment to Canvas.  
+Grading will be done by the TA.  The assignment is worth **100 points**, divided as: 20 for linear algebra, 50 for probability and estimation, and 30 for PCA. Please submit the final assignment to Canvas.  
 
 ## Part 1: Linear Algebra (20 points)
 
@@ -36,7 +36,7 @@ $$
 AB,\quad BA,\quad (A+B)^T,\quad AB^T,\quad \mathrm{trace}(A),\quad \mathrm{trace}(AB).
 $$
 
-**Q2 (10 points).** For the following matrix:
+**Q2 (4 points).** For the following matrix:
 
 $$
 M = \begin{bmatrix}2 & -1 \\ -1 & 2\end{bmatrix}
@@ -44,7 +44,7 @@ $$
 
 Calculate the eigenvalues and eigenvectors. Verify your solution by showing $Mv = \lambda v$.
 
-**Q3 (Ungraded practice, 0 points).** Prove the following property of the trace operator:
+**Q3 (5 points).** Prove the following property of the trace operator:
 
 $$
 \mathrm{trace}(AB)=\mathrm{trace}(BA)
