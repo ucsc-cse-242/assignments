@@ -19,9 +19,7 @@ In this assignment, you will:
 
 ## Grading
 
-The assignment is worth **100 points**, graded automatically: 20 for linear algebra, 50 for probability and estimation, and 30 for PCA. Proofs, written derivations, plot presentation, and interpretation are ungraded practice; points are awarded for the corresponding numerical results and implementations. They will not contribute to your final grade, but we highly recommend that you do them for quiz practice.
-
-Starter code is available in [Assignment1.py]().
+The assignment is worth **100 points**, divided as: 20 for linear algebra, 50 for probability and estimation, and 30 for PCA. Please submit the final assignment to Canvas.  
 
 ## Part 1: Linear Algebra (20 points)
 
