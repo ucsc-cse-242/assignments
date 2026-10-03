@@ -26,8 +26,10 @@ Grading will be done by the TA.  The assignment is worth **100 points**, divided
 **Q1 (5 points).** Given matrices:
 
 $$
-A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}, \quad
-B = \begin{bmatrix}1 & 2 \\ 0 & -1\end{bmatrix}
+A = \begin{bmatrix}3 & 4 \\ 
+2 & 1\end{bmatrix}, \quad
+B = \begin{bmatrix}1 & 2 \\ 
+0 & -1\end{bmatrix}
 $$
 
 Compute:
@@ -39,7 +41,8 @@ $$
 **Q2 (5 points).** For the following matrix:
 
 $$
-M = \begin{bmatrix}2 & -1 \\ -1 & 2\end{bmatrix}
+M = \begin{bmatrix}2 & -1 \\ 
+-1 & 2\end{bmatrix}
 $$
 
 Calculate the eigenvalues and eigenvectors. Verify your solution by showing $Mv = \lambda v$.
@@ -53,7 +56,8 @@ $$
 **Q4 (5 points).** Show step-by-step that the inverse of the matrix
 
 $$
-C = \begin{bmatrix}4 & 7 \\ 2 & 6\end{bmatrix}
+C = \begin{bmatrix}4 & 7 \\ 
+2 & 6\end{bmatrix}
 $$
 
 exists, and compute its inverse.
