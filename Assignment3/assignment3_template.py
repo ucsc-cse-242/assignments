@@ -1,8 +1,4 @@
 """CSE 242 Assignment 3, Question 1: hard-margin linear SVM (30 points).
-
-Student starter template adapted from the Fall 2021 math assignment.
-Complete the TODOs and written explanations; see README.md for requirements.
-Run with Python 3.9+; only the plotting helper requires matplotlib.
 """
 
 import argparse
