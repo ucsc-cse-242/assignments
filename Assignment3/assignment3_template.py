@@ -47,26 +47,37 @@ def plot_svm_data(output_path):
 
 
 def identify_support_vectors():
-    """Q1(a), 10 points together with the plot: identify support vectors by eye.
+    """Q1(a): support vectors identified by eye (1-based point IDs).
 
-    Return their 1-based point IDs and explain your choice in the report.
+    Point 1 (1,1) is the only positive point near the boundary; points 5 (1,0)
+    and 6 (0,1) are the negatives closest to it, lying on x1 + x2 = 1. Points
+    2 and 3 are farther on the positive side and point 4 (0,0) is hidden behind
+    points 5 and 6, so none of them touches the margin.
     """
-    # TODO: Inspect the plot and identify all support vectors.
-    raise NotImplementedError("Identify and justify the support vectors.")
+    return [1, 5, 6]
 
 
 def derive_svm_separator():
-    """Q1(b), 10 points for the boundary and 10 for the geometric margin.
+    """Q1(b): derive the max-margin boundary from the support vectors.
 
-    Use a linear, hard-margin SVM. The decision boundary is w dot x + b = 0;
-    retain the intercept b. Use the support vectors to derive it.
+    Support vectors satisfy y_i (w . x_i + b) = 1:
+        w1 + w2 + b =  1   (point 1)
+        w1      + b = -1   (point 5)
+             w2 + b = -1   (point 6)
+    => w1 = w2 = 2, b = -3, boundary 2 x1 + 2 x2 - 3 = 0.
+    Geometric margin (boundary -> closest points) = 1/||w|| = sqrt(2)/4.
+    The full width between supporting boundaries is 2/||w|| = sqrt(2)/2.
 
-    Return (weights, bias, geometric_margin), with weights a pair of numbers.
-    Explain the derivation and your margin convention in the written report.
+    Return (weights, bias, geometric_margin).
     """
-    # TODO: Derive the maximum-margin separating line from the support vectors.
-    # TODO: Determine the geometric margin and state its meaning.
-    raise NotImplementedError("Derive the SVM boundary and geometric margin.")
+    import numpy as np
+    ids = identify_support_vectors()
+    A = np.array([[*SVM_X[i - 1], 1.0] for i in ids])   # columns: x1, x2, b
+    rhs = np.array([float(SVM_Y[i - 1]) for i in ids])  # y_i
+    w1, w2, b = np.linalg.solve(A, rhs)
+    weights = (float(w1), float(w2))
+    margin = float(1.0 / np.hypot(w1, w2))
+    return weights, float(b), margin
 
 
 def main():

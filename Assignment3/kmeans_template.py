@@ -12,24 +12,39 @@ K_VALUES = (2, 3, 4, 6, 10)
 def update_assignments(data, centroids):
     """Return one cluster index per row, using nearest-centroid distance.
 
-    Q2(a): the two update functions together are worth 15 points.
-    data has shape (n, d); centroids has shape (k, d).
-    The result should be an integer array with shape (n,).
-    Resolve equal-distance ties consistently and document your rule.
+    Tie rule: a point equidistant from several centroids goes to the one with
+    the LOWEST index (np.argmin returns the first minimum).
     """
-    # TODO: Compute distances and assign each point to a centroid.
-    raise NotImplementedError("Implement the assignment step from scratch.")
+    import numpy as np
+    # squared Euclidean distances, shape (n, k)
+    d2 = ((data[:, None, :] - centroids[None, :, :]) ** 2).sum(axis=2)
+    return np.argmin(d2, axis=1).astype(int)
 
 
 def update_centroids(data, centroids, assignments):
     """Return an updated (k, d) centroid array based on cluster assignments.
 
-    Document how you handle an empty cluster. One valid choice is to retain
-    its previous centroid. Avoid modifying the input centroid array in place.
+    Empty-cluster policy: an empty cluster's centroid is re-seeded to the data
+    point currently farthest from its own assigned centroid (distinct points for
+    distinct empty clusters). This also rescues duplicate initial centroids,
+    where the higher-index duplicate always loses ties and would stay empty.
+    The input centroid array is not modified.
     """
-    # TODO: Update the centroid of each nonempty cluster.
-    # TODO: Handle empty clusters using your documented policy.
-    raise NotImplementedError("Implement the centroid step from scratch.")
+    import numpy as np
+    new = np.array(centroids, dtype=float, copy=True)
+    empty = []
+    for j in range(len(centroids)):
+        mask = assignments == j
+        if mask.any():
+            new[j] = data[mask].mean(axis=0)
+        else:
+            empty.append(j)
+    if empty:
+        d2_own = ((data - centroids[assignments]) ** 2).sum(axis=1)
+        farthest_first = np.argsort(-d2_own, kind="stable")
+        for j, idx in zip(empty, farthest_first):
+            new[j] = data[idx]
+    return new
 
 
 def kmeans(data, centroids, max_iterations=100):
@@ -57,16 +72,52 @@ def get_initial_clusters(k, data, rng):
 
 
 def run_experiments(output_dir, seed=0, max_iterations=100):
-    """Q2(b), 15 points: run all five k values and save cluster plots.
+    """Q2(b): run all five k values and save cluster plots.
 
-    Use the four-component truth labels only for a reference plot. K-means
-    must cluster the features without access to those labels.
+    The truth labels are used only for a reference plot.
     """
-    # TODO: Load toy data, create a seeded RNG, and initialize centroids.
-    # TODO: Run kmeans for every value in K_VALUES.
-    # TODO: Plot each set of cluster assignments and its final centroids.
-    # TODO: Save plots under output_dir and discuss the effect of k.
-    raise NotImplementedError("Complete the K-means experiment and plots.")
+    import numpy as np
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    data, truth = make_toy_data()
+    rng = np.random.default_rng(seed)
+
+    # Reference plot (truth labels used for display only).
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.scatter(data[:, 0], data[:, 1], c=truth, s=4, cmap="tab10")
+    ax.set_title("Reference: four generating groups")
+    fig.savefig(output_dir / "reference_truth.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+    results = {}
+    for k in K_VALUES:
+        init = get_initial_clusters(k, data, rng)
+        centroids, assignments = kmeans(data, init, max_iterations)
+        inertia = float(((data - centroids[assignments]) ** 2).sum())
+        results[k] = (centroids, assignments, inertia)
+        fig, ax = plt.subplots(figsize=(6, 6))
+        ax.scatter(data[:, 0], data[:, 1], c=assignments, s=4, cmap="tab10")
+        ax.scatter(centroids[:, 0], centroids[:, 1], c="black", marker="X",
+                   s=160, edgecolors="white", label="centroids")
+        ax.set_title(f"K-means, k={k} (inertia={inertia:.0f})")
+        ax.legend()
+        fig.savefig(output_dir / f"kmeans_k{k}.png", dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        print(f"k={k:2d}: inertia={inertia:10.1f}, "
+              f"non-empty clusters={len(np.unique(assignments))}")
+
+    print("""
+Discussion: with k=2 and k=3 the algorithm must merge the four generating
+groups (large inertia). At k=4 each centroid sits in one blob and inertia has
+an elbow (a poor random init can still split one blob and merge two). For
+k=6 and k=10 blobs are over-segmented into arbitrary sub-clusters through
+dense Gaussian cores; inertia keeps falling but the extra clusters reflect
+no real structure.""")
+    return results
 
 
 def main():
