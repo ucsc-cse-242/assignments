@@ -5,6 +5,8 @@ Complete the TODOs. Keep test labels clean and use them only for evaluation.
 
 import argparse
 from pathlib import Path
+import numpy as np
+import csv
 
 SVM_C = 1.0
 SVM_GAMMA = 0.01
@@ -36,6 +38,13 @@ def corrupt_training_labels(clean_labels, rng):
     Return a new array, leaving clean_labels unchanged.
     """
     # TODO: Draw flips and return the noisy labels.
+    clean_labels = np.asarray(clean_labels)
+    # flip probability depends on original label
+    flip_probability = np.where(clean_labels == 1,
+                                POSITIVE_FLIP_PROBABILITY,
+                                NEGATIVE_FLIP_PROBABILITY)
+    flips = rng.random(len(clean_labels)) < flip_probability 
+    return np.where(flips, -clean_labels, clean_labels)
     raise NotImplementedError("Implement asymmetric training-label noise.")
 
 
@@ -51,6 +60,29 @@ def repair_labels_knn(train_features, noisy_labels, neighbors):
     """
     # TODO: Find neighbors using training features only.
     # TODO: Replace labels using the majority vote of their five neighbors.
+    train_features = np.asarray(train_features, dtype = float)
+    noise_labels = np.asarray(noisy_labels)
+    n = len(train_features)
+    if neighbors < 1 or neighbors >= n:
+        raise ValueError("amount of neighbors not within bounds")
+    if neighbors % 2 == 0:
+        raise ValueError("neighbors must be odd so votes can't tie")
+    if not np.isin(noisy_labels, (-1, 1)).all():
+        raise ValueError("labels must be -1 or +1")
+    
+    # pair squared distances between training points
+    squared_distances = np.empty((n, n))
+    for i in range(n):
+        squared_distances[i] = ((train_features - train_features[i]) ** 2).sum(axis = 1)
+    # points isn't own neighbor, make self distance infinite
+    np.fill_diagonal(squared_distances, np.inf)
+
+    # tie rule, point with lower index picked first
+    nearest = np.argsort(squared_distances, axis = 1, kind="stable")[:, :neighbors]
+
+    # vote over original noist labels, vote sum can't be zero
+    vote_sums = noisy_labels[nearest].sum(axis = 1)
+    return np.where(vote_sums > 0, 1, -1)
     raise NotImplementedError("Implement K-NN majority-vote label repair.")
 
 
@@ -77,6 +109,33 @@ def run_comparison(repeats, seed, neighbors, output_path):
     # TODO: Train a fresh SVM on repaired labels; evaluate on clean test data.
     # TODO: Save per-trial accuracy for all methods to a CSV at output_path.
     # TODO: Report mean accuracy and the change from baseline.
+    rng = np.random.default_rng(seed)
+    # split train/test
+    train_features, train_labels = generate_clean_split(rng)
+    test_features, test_labels = generate_clean_split(rng)
+
+    rows = []
+    for trial in range(1, repeats + 1):
+        # corrupt
+        noisy_labels = corrupt_training_labels(train_labels, rng)
+        baseline_accuracy = train_and_evaluate(train_features, noisy_labels, test_features, test_labels)
+        # repair sees training features + noisy labels
+        repaired_labels = repair_labels_knn(train_features, noisy_labels, neighbors)
+        knn_accuracy = train_and_evaluate(train_features, repaired_labels, test_features, test_labels)
+        rows.append((trial, baseline_accuracy, knn_accuracy))
+    
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok = True)
+    with open(output_path, "w", newline="") as f:
+        writer = csv.writer(f, lineterminator="\n")
+        writer.writerow(("trial", "baseline_accuracy", "knn_accuracy"))
+        writer.writerows(rows)
+    mean = float(np.mean([r[1] for r in rows]))
+    knn_mean = float(np.mean([r[2] for r in rows]))
+    print(f"baseline accuracy with noisy labels: {mean}")
+    print(f"knn repaired mean accuracy: {knn_mean}")
+    print(f"saved results to {output_path}")
+    return rows
     raise NotImplementedError("Complete the repeated noise-repair comparison.")
 
 
